@@ -39,8 +39,10 @@ class Text:
             gfx.dirty(r)
 
     def draw(self):
-        r = gfx.surface.blit(self.img, self.rect)
-        gfx.dirty(r)
+        # TODO disable
+        pass
+        #r = gfx.surface.blit(self.img, self.rect)
+        #gfx.dirty(r)
 
     def tick(self, speedadjust):
         self.clocks -= 1

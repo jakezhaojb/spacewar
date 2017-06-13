@@ -1,6 +1,6 @@
 """graphics class, helps everyone to draw"""
 
-import sys, pygame, pygame.image
+import os, sys, pygame, pygame.image
 from pygame.locals import *
 
 import var, stars
@@ -11,6 +11,7 @@ rect = Rect(0, 0, 0, 0)
 
 #the accessable dirty rectangles
 dirtyrects = []
+image_save_cnt = 0
 
 
 starobj = None
@@ -66,8 +67,14 @@ def updatestars(bgd, gfx):
 
 
 def update():
-    global dirtyrects
+    global dirtyrects, image_save_cnt
     pygame.display.update(dirtyrects)
+    if image_save_cnt == 0:
+        if os.path.isfile("videos"):
+            os.system("rm -r videos; mkdir videos")
+    if image_save_cnt % 10 == 0:
+        pygame.image.save(surface, "videos/image_{:08d}.jpg".format(image_save_cnt))
+    image_save_cnt += 1
     #dirtyrects = []
     del dirtyrects[:]
 

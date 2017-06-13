@@ -81,9 +81,13 @@ def playmusic(musicname, volume=1.0):
     else:
         prefvolume = [0, 0.6, 1.0][var.music]
         fullname = os.path.join('data', 'music', musicname)
-        music.load(fullname)
-        music.play(-1)
-        music.set_volume(prefvolume*CurrentVolume)
+        try:
+            music.load(fullname)
+            music.play(-1)
+            music.set_volume(prefvolume*CurrentVolume)
+        except:
+            print(fullname)
+            pass
 
 def finish_playmusic():
     global CurrentSong, SwitchingSongs, CurrentVolume

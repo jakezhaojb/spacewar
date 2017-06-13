@@ -34,7 +34,7 @@ def gamemain(args):
     if '-window' in args:
         full = 0
     gfx.initialize(size, full)
-    pygame.display.set_caption('Spacewar')
+    #pygame.display.set_caption('Spacewar')
 
     if not '-nosound' in args:
         if not var.ai_train:
@@ -71,7 +71,7 @@ def gamemain(args):
         for event in pygame.event.get():
             if event.type == pygame.USEREVENT:
                 fps = var.clock.get_fps()
-                #print 'FRAMERATE: %f fps' % fps
+                print 'FRAMERATE: %f fps' % fps
                 gfx.starobj.recalc_num_stars(fps)
                 continue
             elif event.type == pygame.ACTIVEEVENT:
