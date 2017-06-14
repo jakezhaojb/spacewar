@@ -70,9 +70,9 @@ def update():
     global dirtyrects, image_save_cnt
     pygame.display.update(dirtyrects)
     if image_save_cnt == 0:
-        if os.path.isfile("videos"):
+        if os.path.isdir("videos"):
             os.system("rm -r videos; mkdir videos")
-    if image_save_cnt % 10 == 0:
+    if image_save_cnt % 5 == 0:
         pygame.image.save(surface, "videos/image_{:08d}.jpg".format(image_save_cnt))
     image_save_cnt += 1
     #dirtyrects = []

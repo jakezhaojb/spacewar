@@ -46,6 +46,7 @@ def gamemain(args):
 
     #create the starting game handler
     from gameinit import GameInit
+    from gamemenu import GameMenu
     from gamefinish import GameFinish
     var.handler = GameInit(GameFinish(None))
 
@@ -57,7 +58,7 @@ def gamemain(args):
     gamestart = pygame.time.get_ticks()
     numframes = 0
     #random.seed(0)
-
+    menuenter = 0
 
     #main game loop
     lasthandler = None
@@ -68,36 +69,56 @@ def gamemain(args):
             lasthandler = handler
             if hasattr(handler, 'starting'):
                 handler.starting()
-        for event in pygame.event.get():
-            if event.type == pygame.USEREVENT:
-                fps = var.clock.get_fps()
-                print 'FRAMERATE: %f fps' % fps
-                gfx.starobj.recalc_num_stars(fps)
-                continue
-            elif event.type == pygame.ACTIVEEVENT:
-                if event.state == 4 and event.gain:
-                    #uniconified, lets try to kick the screen
-                    pygame.display.update()
-                elif event.state == 2:
-                    if hasattr(var.handler, 'gotfocus'):
-                        if event.gain:
-                            var.handler.gotfocus()
-                        else:
-                            var.handler.lostfocus()
-                continue
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                if event.mod&pygame.KMOD_ALT:
-                    var.display = not var.display
-                    gfx.switchfullscreen()
+        if (not isinstance(handler, GameMenu)) or menuenter == 1:
+        #if True:
+            for event in pygame.event.get():
+                if event.type == pygame.USEREVENT:
+                    fps = var.clock.get_fps()
+                    print 'FRAMERATE: %f fps' % fps
+                    gfx.starobj.recalc_num_stars(fps)
                     continue
-            inputevent = input.translate(event)
+                elif event.type == pygame.ACTIVEEVENT:
+                    if event.state == 4 and event.gain:
+                        #uniconified, lets try to kick the screen
+                        pygame.display.update()
+                    elif event.state == 2:
+                        if hasattr(var.handler, 'gotfocus'):
+                            if event.gain:
+                                var.handler.gotfocus()
+                            else:
+                                var.handler.lostfocus()
+                    continue
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                    if event.mod&pygame.KMOD_ALT:
+                        var.display = not var.display
+                        gfx.switchfullscreen()
+                        continue
+                inputevent = input.translate(event)
+                #print(event.dict, event.type)
+                #print(event, inputevent)
+                if inputevent.normalized != None:
+                    inputevent = input.exclusive((input.UP, input.DOWN, input.LEFT, input.RIGHT), inputevent)
+                    handler.input(inputevent)
+                elif event.type == pygame.QUIT:
+                    var.handler = None
+                    break
+                handler.event(event)
+        else:
+            newdict = {}
+            newdict['normalized'] = 13
+            newdict['translated'] = 5
+            newdict['all'] = 0
+            newdict['release'] = 0
+            newdict['normalized'] = 310
+            newdict['key'] = 310
+            newdict['mod'] = 0
+            inputevent = pygame.event.Event(3, newdict)
             if inputevent.normalized != None:
                 inputevent = input.exclusive((input.UP, input.DOWN, input.LEFT, input.RIGHT), inputevent)
                 handler.input(inputevent)
-            elif event.type == pygame.QUIT:
-                var.handler = None
-                break
-            handler.event(event)
+            handler.event(inputevent)
+            menuenter = 1  # flag: done
+
         handler.run()
         # If in AI training mode then don't slow frame rate
         if var.ai_train and hasattr(handler,'start_player'):

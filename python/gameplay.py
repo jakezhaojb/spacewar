@@ -310,15 +310,19 @@ class GamePlay(Player):
                               (1, var.player_2, left+50, top+50),
                               (2, var.player_3, right-50, top+50),
                               (3, var.player_4, left+50, bottom-50)):
-            if ppref == 1 or var.game_mode == 2:
-                ship = objs.Ship(num, x, y)
-                self.players.append(agents.HumanAgent(num, ship))
-                if var.game_mode == 2: break
-            elif ppref == 2:
-                ship = objs.Ship(num, x, y)
-                dna = random.choice(ai.dna_pool)
-                self.players.append(agents.DNAAgent(num, ship, 
-                    dna=dna, objs=[objs.low, objs.high]))
+            ship = objs.Ship(num, x, y)
+            dna = random.choice(ai.dna_pool)
+            self.players.append(agents.DNAAgent(num, ship, 
+                dna=dna, objs=[objs.low, objs.high]))
+            #if ppref == 1 or var.game_mode == 2:
+            #    ship = objs.Ship(num, x, y)
+            #    self.players.append(agents.HumanAgent(num, ship))
+            #    if var.game_mode == 2: break
+            #elif ppref == 2:
+            #    ship = objs.Ship(num, x, y)
+            #    dna = random.choice(ai.dna_pool)
+            #    self.players.append(agents.DNAAgent(num, ship, 
+            #        dna=dna, objs=[objs.low, objs.high]))
         #self.players[0].ship.shield = 100.0
         #self.players[0].ship.bullet = var.bbobble_charge
 

@@ -71,6 +71,7 @@ class GameMenu:
         self.boxrect = self.boximages[0].get_rect().move(580, 80)
         self.bigship = images[2]
         self.bigshiprect = self.bigship.get_rect().move(450, 250)
+        self.damn = 0
 
         if var.ai_train:
             print "ai_train"
@@ -188,6 +189,8 @@ class GameMenu:
             self.current = (self.current + 1)%len(self.menu)
             snd.play('select_move')
         elif i.translated == input.PRESS:
+            print("DAMN", self.current)
+            self.damn = 1
             self.workbutton()
             snd.play('select_choose')
         elif i.translated == input.ABORT:
