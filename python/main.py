@@ -29,6 +29,16 @@ def gamemain(args):
     if '-aitrain' in args:
         var.ai_train = 1
 
+    # number of players
+    if '-one' in args:
+        var.numplayers = 1
+    elif '-two' in args:
+        var.numplayers = 2
+    elif '-three' in args:
+        var.numplayers = 3
+    else:
+        var.numplayers = 4
+
     size = 800, 600
     full = var.display
     if '-window' in args:

@@ -4,6 +4,7 @@ import os, sys, pygame, pygame.image
 from pygame.locals import *
 
 import var, stars
+import time, datetime
 
 #the accessable screen surface and size
 surface = None
@@ -12,6 +13,8 @@ rect = Rect(0, 0, 0, 0)
 #the accessable dirty rectangles
 dirtyrects = []
 image_save_cnt = 0
+foldername = ''
+starttime = 0
 
 
 starobj = None
@@ -67,13 +70,18 @@ def updatestars(bgd, gfx):
 
 
 def update():
-    global dirtyrects, image_save_cnt
+    global dirtyrects, image_save_cnt, foldername, starttime
     pygame.display.update(dirtyrects)
     if image_save_cnt == 0:
-        if os.path.isdir("videos"):
-            os.system("rm -r videos; mkdir videos")
-    if image_save_cnt % 5 == 0:
-        pygame.image.save(surface, "videos/image_{:08d}.jpg".format(image_save_cnt))
+        timestr = time.strftime("%Y%m%d_%H%M%S")
+        foldername = "videos/" + "{:d}_".format(var.numplayers) + timestr
+        os.system("mkdir -p " + foldername)
+        starttime = datetime.datetime.now()
+    elif image_save_cnt % 5 == 0 and image_save_cnt > 160:
+        pygame.image.save(surface, foldername + "/image_{:08d}.jpg".format(image_save_cnt))
+        nowtime = datetime.datetime.now()
+        if (nowtime-starttime).total_seconds() > 60:
+            sys.exit(1)
     image_save_cnt += 1
     #dirtyrects = []
     del dirtyrects[:]

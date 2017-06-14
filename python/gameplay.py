@@ -310,10 +310,13 @@ class GamePlay(Player):
                               (1, var.player_2, left+50, top+50),
                               (2, var.player_3, right-50, top+50),
                               (3, var.player_4, left+50, bottom-50)):
-            ship = objs.Ship(num, x, y)
-            dna = random.choice(ai.dna_pool)
-            self.players.append(agents.DNAAgent(num, ship, 
-                dna=dna, objs=[objs.low, objs.high]))
+            if num < var.numplayers:
+                ship = objs.Ship(num, x, y)
+                dna = random.choice(ai.dna_pool)
+                self.players.append(agents.DNAAgent(num, ship, 
+                    dna=dna, objs=[objs.low, objs.high]))
+            else:
+                exec("var.player_" + str(num+1) + " = 0")
             #if ppref == 1 or var.game_mode == 2:
             #    ship = objs.Ship(num, x, y)
             #    self.players.append(agents.HumanAgent(num, ship))
